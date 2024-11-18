@@ -7,7 +7,7 @@ GPIO 6 <---> IN 3
 GPIO 7 <---> IN 4
 */
 
-#include "driver/mcpwm.h"
+//#include "driver/mcpwm.h"
 
 // LED PWM Stuff;
 #define FREQ 20000
@@ -32,6 +32,8 @@ GPIO 7 <---> IN 4
 #define SPEED_UP_LEFT   4
 #define SPEED_UP_RIGHT  5
 #define SPEED_TEST 6
+#define SENTRY_FORWARD 7
+#define SENTRY_BACKWARD 8
 
 void setup() {
 
@@ -99,6 +101,18 @@ void motorVariableCCW(int in1, int in2, int speed) {
   ledcWrite(in2, LED_C_LOW);
 }
 
+// Function to move Sentry forwards.
+void moveForward(int in1_L, int in2_L, int in1_R, int in2_R) {
+  motorCCW(in1_L, in2_L);
+  motorCW(in1_R, in2_R);
+}
+
+// Function to move Sentry backwards.
+void moveBackward(int in1_L, int in2_L, int in1_R, int in2_R) {
+  motorCW(in1_L, in2_L);
+  motorCCW(in1_R, in2_R);
+}
+
 void performCommand(int command) {
   
   int speed = 0;
@@ -143,6 +157,20 @@ void performCommand(int command) {
       speed = Serial.parseInt();
       motorVariableCW(R_MOT_1, R_MOT_2, speed);
       delay(3000);
+      motorStop(R_MOT_1, R_MOT_2);
+      break;
+
+    case SENTRY_FORWARD:
+      moveForward(L_MOT_1, L_MOT_2, R_MOT_1, R_MOT_2);
+      delay(1000);
+      motorStop(L_MOT_1, L_MOT_2);
+      motorStop(R_MOT_1, R_MOT_2);
+      break;
+
+    case SENTRY_BACKWARD:
+      moveBackward(L_MOT_1, L_MOT_2, R_MOT_1, R_MOT_2);
+      delay(1000);
+      motorStop(L_MOT_1, L_MOT_2);
       motorStop(R_MOT_1, R_MOT_2);
       break;
 
