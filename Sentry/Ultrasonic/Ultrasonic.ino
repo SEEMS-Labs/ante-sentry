@@ -1,16 +1,14 @@
 // Sensor Pins:
 // Vcc = 5V
-// Trig = 14
-// Echo = 12
+// Trig = 10
+// Echo = 9
 // Gnd = Gnd
-#include <Arduino.h>
-#include <LiquidCrystal.h>
 #define BAUD_RATE 9600
-#define DELAY_LEN 250 * 4
+#define DELAY_LEN 1000
 
 // Ultrasonic Sensor Pin Definitions.
-#define ECHO 12
-#define TRIGGER 14
+#define ECHO 9
+#define TRIGGER 10
 
 // Ultrasonic sensor variables.
 double duration, cm, inches;
